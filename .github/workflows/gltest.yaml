@@ -1,0 +1,43 @@
+name: gltest
+# either manually started, or on a schedule
+on: [ push, workflow_dispatch ]
+jobs:
+  test:
+    env:
+        OPENLANE_IMAGE_NAME:    efabless/openlane:2022.07.02_01.38.08
+        OPENLANE_ROOT:  /home/runner/openlane
+        PDK_ROOT:       /home/runner/pdk
+        PDK:            sky130B
+    # ubuntu
+    runs-on: ubuntu-latest
+    steps:
+    # need the repo checked out
+    - name: checkout repo
+      uses: actions/checkout@v2
+
+    # build PDK
+    - name: pdk
+      run: |
+        cd $HOME
+        git clone https://github.com/efabless/caravel_user_project.git -b mpw-7a
+        cd caravel_user_project
+        make pdk-with-volare
+
+    # install oss fpga tools
+    - name: install oss-cad-suite
+      uses: YosysHQ/setup-oss-cad-suite@v1
+      with:
+          python-override: true
+    - run: | 
+        yosys --version
+        iverilog -V
+        cocotb-config --libpython
+        cocotb-config --python-bin
+
+    - name: test
+      run: |
+        cd src
+        GATES=yes make
+        # make will return success even if the test fails, so check for failure in the results.xml
+        ! grep failure results.xml
+
