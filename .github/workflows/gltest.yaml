@@ -21,7 +21,7 @@ jobs:
         cd $HOME
         git clone https://github.com/efabless/caravel_user_project.git -b mpw-7a
         cd caravel_user_project
-        make pdk-with-volare
+        make install pdk-with-volare
 
     # install oss fpga tools
     - name: install oss-cad-suite
