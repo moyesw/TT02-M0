@@ -116,11 +116,9 @@ module m0_top_module (
   
 endmodule 
 
+
+/*
 //=============================================================================
-/*\
-|*| M0 main test bench
-|*|
-\*/
 `timescale 1us/1ns
 
 module m0_testbench;
@@ -192,3 +190,5 @@ module m0_testbench;
   
 
 endmodule
+
+*/
