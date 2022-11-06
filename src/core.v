@@ -90,7 +90,7 @@ module m0_top_module (
   // pin 3 shift reg
   shift_reg r1(
     .clk(clk),
-    .rst(rst),
+    .rst(1'b0),
     .en(1'b1),
     .in(io_in[3]),
     .out(io_out[3])
@@ -99,7 +99,7 @@ module m0_top_module (
   // pin 4 shift reg  
   shift_reg r2(
     .clk(clk),
-    .rst(rst),
+    .rst(1'b0),
     .en(1'b1),
     .in(io_in[4]),
     .out(io_out[4])
@@ -108,7 +108,7 @@ module m0_top_module (
   // pin 5 shift reg
   shift_reg r3(
     .clk(clk),
-    .rst(rst),
+    .rst(1'b0),
     .en(1'b1),
     .in(io_in[5]),
     .out(io_out[5])
