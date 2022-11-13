@@ -6,7 +6,7 @@ project:
     - counter.v
     - decoder.v
     - core.v
-  top_module:  "m0_top_module"      # put the name of your top module here, make it unique by prepending your github username
+  top_module:  "moyes0_top_module"      # put the name of your top module here, make it unique by prepending your github username
 
 # As everyone will have access to all designs, try to make it easy for someone new to your design to know what
 # it does and how to operate it.
