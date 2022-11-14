@@ -209,12 +209,6 @@ module moyes0_top_module (
     end
   end
 
-
-  always @(posedge clk) begin
-    if (rst)  // TODO: Evalute if shifting in 0's is better
-      PC  <= 16'h0000;
-  end
-
   wire PCphase = (CPUphase == 0) || (CPUphase == 2) || (CPUphase == 5);
 
   assign Addr15 = PCphase ? PC[15] : ADR[15];
@@ -222,16 +216,21 @@ module moyes0_top_module (
   assign Read_notWrite = (CPUphase != 4);
 
   always @(posedge clk) begin
-    if (PresetCarry)
-      PCCarry <= 1;
 
-    if (PCphase && ShiftAddr) begin
-      PCCarry <= PC[0] & PCCarry;
-      PC <= {PC[0] ^ PCCarry, PC[15:1]};
-    end
+    if (rst)
+      PC  <= 16'h0000;
+    else begin
+      if (PresetCarry)
+        PCCarry <= 1;
 
-    if ((CPUphase == 5) && ShiftDataRead) begin
-      PC <= {LEQ ? spi_miso : PC[0], PC[15:1]};
+      if (PCphase && ShiftAddr) begin
+        PCCarry <= PC[0] & PCCarry;
+        PC <= {PC[0] ^ PCCarry, PC[15:1]};
+      end
+
+      if ((CPUphase == 5) && ShiftDataRead) begin
+        PC <= {LEQ ? spi_miso : PC[0], PC[15:1]};
+      end
     end
   end
 
