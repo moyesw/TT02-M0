@@ -1,6 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////
 // M0 - 16-bit serial SUBLEQ processor
 //
+//
 // Copyright 2022 William Moyes
 //
 
@@ -37,7 +38,8 @@ module SPIController (
   output reg ShiftDataRead,     // Asserted when the data register collecting data read from memory should be shifted
   output reg ShiftDataWrite,    // Asserted when the data regsiter providing data to be written to memory should be shifted
   output reg PresetCarry,       // Asserted the clock before data motion starts
-  output reg EndOfPhase         //
+  output reg EndOfPhase,        //
+  output reg PrepOutput
 );
 
   // SPI sequencer
@@ -75,7 +77,7 @@ module SPIController (
           MOSI <= Read_notWrite;
       end else if (SPIphase <= 47) begin
         if (SPIphase[0] == 0)
-          MOSI <= Addr;		// TODO: Generate the Address Shift timing pulse output
+          MOSI <= Addr;
       end else if (SPIphase <= 49)
         MOSI <= 0;
       else begin
@@ -83,7 +85,7 @@ module SPIController (
           MOSI <= 0;
         else begin
           if (SPIphase[0] == 0)
-            MOSI <= Data;      	// TODO: Generate the Address Shift timing pulse output
+            MOSI <= Data;
         end
       end
     end
@@ -96,6 +98,7 @@ module SPIController (
     ShiftDataWrite <= ((SPIphase >= 50) && (SPIphase <= 80) && (SPIphase[0] == 0) && !Read_notWrite);
     PresetCarry <= (SPIphase == 17);
     EndOfPhase <= (SPIphase == 83);
+    PrepOutput <= (SPIphase == 49);
   end
 
   reg CSreg;
@@ -144,7 +147,7 @@ module moyes0_top_module (
   assign io_out[4] = uart_tx;  // Serial port, ASIC Transmit
   assign io_out[5] = out5;
   assign io_out[6] = out6;
-  assign io_out[7] = out7;
+  assign io_out[7] = !clk;
 
   // --- Internal Timing Signals ---
   wire ShiftAddr;
@@ -152,6 +155,7 @@ module moyes0_top_module (
   wire ShiftDataWrite;
   wire PresetCarry;
   wire EndOfPhase;
+  wire PrepOutput;
 
   // --- SPI Control Signals
   wire Addr15;
@@ -192,7 +196,8 @@ module moyes0_top_module (
     .ShiftDataRead(ShiftDataRead),
     .ShiftDataWrite(ShiftDataWrite),
     .PresetCarry(PresetCarry),
-    .EndOfPhase(EndOfPhase)
+    .EndOfPhase(EndOfPhase),
+    .PrepOutput(PrepOutput)
   );
 
   reg [2:0]  CPUphase;
@@ -247,6 +252,33 @@ module moyes0_top_module (
 
     if (!PCphase & ShiftAddr)
       ADR <= {ADR[0], ADR[15:1]};
+  end
+
+  // Transmit UART
+  reg BwasFFFF;
+  reg UARTout;
+  assign uart_tx = UARTout;
+  reg [4:0] UARTcount;
+  always @(posedge clk) begin
+    if (EndOfPhase) begin
+      BwasFFFF <= 1;
+      UARTout <= 1;
+      UARTcount <= 0;
+    end
+
+    if (ShiftAddr & !ADR[0])
+      BwasFFFF <= 0;
+
+    if (BwasFFFF & (CPUphase == 3)& PrepOutput) begin
+      UARTout <= 0;
+      UARTcount <= 9;
+    end
+
+    if ((UARTcount != 0) & ShiftDataRead) begin
+      UARTcount <= UARTcount - 1;
+      UARTout <= (UARTcount != 1) ? TMP[0] : 1;
+    end;
+
   end
 
 
