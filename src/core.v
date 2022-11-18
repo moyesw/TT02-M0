@@ -137,8 +137,8 @@ module moyes0_top_module (
   wire out7;
 
   wire [7:0] io_out;
-  assign io_out[0] = spi_cs0;  // SPI bus, Chip Select for ROM, Words 0000-7FFF
-  assign io_out[1] = spi_cs1;  // SPI bus, Chip Select for RAM, Words 8000-FFFF
+  assign io_out[0] = spi_cs0;  // SPI bus, Chip Select for RAM, Words 0000-7FFF
+  assign io_out[1] = spi_cs1;  // SPI bus, Chip Select for ROM, Words 8000-FFFF
   assign io_out[2] = spi_clk;  // SPI bus, Clock
   assign io_out[3] = spi_mosi; // SPI bus, ASIC output, target input
   assign io_out[4] = uart_tx;  // Serial port, ASIC Transmit
@@ -218,7 +218,7 @@ module moyes0_top_module (
   always @(posedge clk) begin
 
     if (rst)
-      PC  <= 16'h0000;
+      PC  <= 16'h8000;
     else begin
       if (PresetCarry)
         PCCarry <= 1;
@@ -277,7 +277,7 @@ module moyes0_top_module (
 
   always @(posedge clk) begin
     if (EndOfPhase & (CPUphase == 3)) begin
-      LEQ <= TZero | TBorrow;
+      LEQ <= TZero | TMP[15];
     end
   end
 
