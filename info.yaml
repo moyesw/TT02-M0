@@ -43,5 +43,5 @@ documentation:
     - uart_tx
     - none
     - none
-    - !clk
+    - clk_out_n
 
