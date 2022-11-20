@@ -16,19 +16,19 @@ project:
 # This info will be automatically collected and used to make a datasheet for the chip.
 documentation: 
   author:       "William Moyes"      # Your name
-  discord:      ""      # Your discord handle
-  title:        "M0"      # Project title
-  description:  "todo"      # Short description of what your project does
-  how_it_works: "todo"      # Longer description of how the project works
-  how_to_test:  "todo"      # Instructions on how someone could test your project, include things like what buttons do what and how to set the clock if needed
-  external_hw:  ""      # Describe any external hardware needed
+  discord:      "WilliamM"      # Your discord handle
+  title:        "M0: A 16-bit SUBLEQ Microprocessor"      # Project title
+  description:  "A capable but slow microprocessor that fits in a very tight space"      # Short description of what your project does
+  how_it_works: "The M0 is a 16-bit, bit serial microprocessor based upon the SUBLEQ architecture. The only external devices needed for operation are a SPI RAM, SPI ROM, and clock source. The entire ROM and RAM are available for user code.  All registers and logic are contained within the M0 itself. A transmit UART is included for serial output. The M0 interoperates with Oleg Mazonka's HSQ C-compiler for SUBLEQ. See https://github.com/moyesw/TT02-M0/blob/main/README.md for full details on the M0."      # Longer description of how the project works
+  how_to_test:  "Connect a programmed SPI ROM to CS1, and a SPI RAM to CS0. Assert Reset. Power up the ASIC and provide a clock (observe clock feedback on pin7). Lower Reset, and observe execution. The program's serial output will appear on output pin 4 at a baud rate that is one half the input clock frequency. See https://github.com/moyesw/TT02-M0/blob/main/README.md for information on external connections, ROM and RAM data formats, instruction set, and compiler usage."      # Instructions on how someone could test your project, include things like what buttons do what and how to set the clock if needed
+  external_hw:  "A SPI ROM and RAM for user code"      # Describe any external hardware needed
   language:     "verilog" # other examples include Verilog, Amaranth, VHDL, etc
-  doc_link:     ""      # URL to longer form documentation, eg the README.md in your repository
-  clock_hz:     12000       # Clock frequency in Hz (if required)
+  doc_link:     "https://github.com/moyesw/TT02-M0/blob/main/README.md"      # URL to longer form documentation, eg the README.md in your repository
+  clock_hz:     12500       # Clock frequency in Hz (if required)
   picture:      ""      # relative path to a picture in your repository
   inputs:               # a description of what the inputs do
-    - clock
-    - reset
+    - clk
+    - rst
     - spi_miso
     - none
     - none
@@ -40,8 +40,8 @@ documentation:
     - spi_cs1
     - spi_clk
     - spi_mosi
+    - uart_tx
     - none
     - none
-    - none
-    - none
+    - !clk
 
