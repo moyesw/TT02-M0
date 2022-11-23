@@ -1,8 +1,31 @@
 ///////////////////////////////////////////////////////////////////////////
 // M0 - 16-bit serial SUBLEQ processor
 //
-//
 // Copyright 2022 William Moyes
+//
+// The M0 is a 16-bit, bit serial microprocessor based upon the SUBLEQ
+// architecture. The only external devices needed for operation are a SPI
+// RAM, SPI ROM, and clock source. The entire ROM and RAM are available for
+// user code.  All registers and logic are contained within the M0 itself.
+// A transmit UART is included for serial output.
+//
+// See README.md at https://github.com/moyesw/TT02-M0/blob/main/README.md
+// for more information on the M0 architecture.
+//
+// The M0 microarchitecture
+// --------------------------
+// PC - Program counter shift register
+// ADR - Address shift register
+// TMP - Temporary shift register
+//
+// The M0 has a six phase exeuction sequence. Each phase performs
+// one 16-bit access to the SPI bus:
+//   Phase 0: ADR <-- mem[PC++]
+//   Phase 1: TMP <-- mem[ADR]
+//   Phase 2: ADR <-- mem[PC++]
+//   Phase 3: TMP <-- mem[ADR] - TMP    ;checks if result <= 0
+//   Phase 4: mem[ADR] <-- TMP
+//   Phase 5: PC <-- mem[PC++] or PC++
 //
 
 `default_nettype none
@@ -147,7 +170,7 @@ module moyes0_top_module (
   assign io_out[4] = uart_tx;  // Serial port, ASIC Transmit
   assign io_out[5] = out5;
   assign io_out[6] = out6;
-  assign io_out[7] = !clk;
+  assign io_out[7] = out7;
 
   // --- Internal Timing Signals ---
   wire ShiftAddr;
@@ -172,6 +195,7 @@ module moyes0_top_module (
   reg TZero;
   reg LEQ;
 
+  assign out7 = !in7;  // For bring-up testing, out7 = !in7. No other internal connections
 
   SPIController spi (
      // System Interfaces

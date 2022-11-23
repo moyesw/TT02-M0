@@ -11,7 +11,7 @@ The M0 is a SUBLEQ (SUBtract and jump if Less than or EQual) microprocessor. All
 
 Address map:
 - 0000-7FFF RAM (connected to SPI CS0)
-- 8000-FFFF ROM (connected to SPI CS1)`
+- 8000-FFFF ROM (connected to SPI CS1)
 
 Special addresses:
 - 8000 = Reset value of the M0 Program Counter
@@ -86,7 +86,7 @@ Inputs:
 |4|unused||
 |5|unused||
 |6|unused||
-|7|unused||
+|7|dbg_in|Fed to dbg_out|
 
 Outputs: 
 | pin | name | Description |
@@ -98,9 +98,9 @@ Outputs:
 |4|uart_tx|Serial port, ASIC Transmit|
 |5|unused||
 |6|unused||
-|7|!clk|debug clock|
+|7|dbg_out|inverted dbg_in|
 
-The UART operates at a baud rate equal to one half of the input clock frequency on pin in0. Proper receiving of serial output is timing sensitive. TinyTapeout02 uses a scan chain based input/output scheme which may introduce jitter as the clock speed nears the scan chain speed. Therefore, care should be taken in how the M0 is clocked. The out7 pin reflects an inverted copy of in0, and may be used to monitor the quality of the M0 input and output timing.
+The UART operates at a baud rate equal to one half of the input clock frequency on pin in0. Proper receiving of serial output is timing sensitive. TinyTapeout02 uses a scan chain based input/output scheme which may introduce jitter as the clock speed nears the scan chain speed. Therefore, care should be taken in how the M0 is clocked. The out7 pin reflects an inverted copy of in7, and may be used to monitor the quality of the M0 input and output timing.
 
 The M0 is designed to interface with the following SPI devices:
 - Microchip 23LC512 SPI SRAM     (CS0)
