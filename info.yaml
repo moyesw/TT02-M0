@@ -30,7 +30,7 @@ documentation:
   language:     "verilog" # other examples include Verilog, Amaranth, VHDL, etc
   doc_link:     "https://github.com/moyesw/TT02-M0/blob/main/README.md"      # URL to longer form documentation, eg the README.md in your repository
   clock_hz:     12500       # Clock frequency in Hz (if required)
-  picture:      ""      # relative path to a picture in your repository
+  picture:      "hello_c.png"      # relative path to a picture in your repository
   inputs:               # a description of what the inputs do
     - clk
     - rst
