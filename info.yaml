@@ -16,7 +16,7 @@ project:
 # This info will be automatically collected and used to make a datasheet for the chip.
 documentation: 
   author:       "William Moyes"      # Your name
-  discord:      "WilliamM"      # Your discord handle
+  discord:      "WilliamM#5615"      # Your discord handle
   title:        "M0: A 16-bit SUBLEQ Microprocessor"      # Project title
   description:  "A capable but slow microprocessor that fits in a very tight space"      # Short description of what your project does
   how_it_works: "The M0 is a 16-bit, bit serial microprocessor based upon the SUBLEQ architecture. The only external devices needed for operation are a SPI RAM, SPI ROM, and clock source. The entire ROM and RAM are available for user code.  All registers and logic are contained within the M0 itself. A transmit UART is included for serial output. The M0 interoperates with Oleg Mazonka's HSQ C-compiler for SUBLEQ. See https://github.com/moyesw/TT02-M0/blob/main/README.md for full details on the M0."      # Longer description of how the project works
